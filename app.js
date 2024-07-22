@@ -3,7 +3,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-// const x=2
+
 const app = express();
 const port = 5000;
 
@@ -14,13 +14,13 @@ app.use(cors());
 // MySQL connection
 const db = mysql.createConnection({
   host: 'sql3.freesqldatabase.com',
-  user: 'sql3721397', // Change this to your FreeSQLDatabase username
-  password: 'tXF5imL42A', // Change this to your FreeSQLDatabase password
-  database: 'sql3721397', // Change this to your FreeSQLDatabase name
-  connectionLimit: 100,
-  // port: 3306 // Change this to your FreeSQLDatabase port
+  user: 'sql3721397', // Your FreeSQLDatabase username
+  password: 'tXF5imL42A', // Your FreeSQLDatabase password
+  database: 'sql3721397', // Your FreeSQLDatabase name
+  port: 3306 // Ensure the port matches your database configuration
 });
 
+// Connect to MySQL database
 db.connect((err) => {
   if (err) {
     console.error('Database connection error:', err);
@@ -54,22 +54,25 @@ app.get('/data/:id', (req, res) => {
     if (err) {
       console.error('Error retrieving form data:', err);
       res.status(500).send('Error retrieving form data');
+    } else if (results.length === 0) {
+      res.status(404).send('Data not found');
     } else {
       res.json(results[0]);
     }
   });
 });
 
-
 app.get('/allteam', (req, res) => {
-    const query = 'SELECT * FROM submissions';
-    db.query(query, (err, results) => {
-      if (err) {
-        return res.status(500).send(err);
-      }
+  const query = 'SELECT * FROM submissions';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error retrieving all team data:', err);
+      res.status(500).send('Error retrieving all team data');
+    } else {
       res.json(results);
-    });
+    }
   });
+});
 
 // Start the server
 app.listen(port, () => {
