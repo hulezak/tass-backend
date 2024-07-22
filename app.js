@@ -32,7 +32,8 @@ db.connect((err) => {
 // Routes
 app.post('/submit', (req, res) => {
   const { name, city, country, grade, bestBook, bestMusic, pets, siblings, bestMusician, favoriteColor, birthDate } = req.body;
-
+ 
+  cl
   const query = 'INSERT INTO submissions (name, city, country, grade, bestBook, bestMusic, pets, siblings, bestMusician, favoriteColor, birthDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
   const values = [name, city, country, grade, bestBook, bestMusic, pets, siblings, bestMusician, favoriteColor, birthDate];
 
