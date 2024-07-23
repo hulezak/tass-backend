@@ -11,22 +11,28 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // MySQL connection
-const db = mysql.createConnection({
+const mysql = require('mysql');
+
+const pool = mysql.createPool({
   host: 'sql3.freesqldatabase.com',
   user: 'sql3721397', // Your FreeSQLDatabase username
   password: 'tXF5imL42A', // Your FreeSQLDatabase password
   database: 'sql3721397', // Your FreeSQLDatabase name
-  port: 3306 // Ensure the port matches your database configuration
+  port: 3306, // Ensure the port matches your database configuration
+  connectionLimit: 10 // Adjust this based on your application's needs
 });
 
-// Connect to MySQL database
-db.connect((err) => {
+// Connect to MySQL database using the pool
+pool.getConnection((err, connection) => {
   if (err) {
     console.error('Database connection error:', err);
     process.exit(1);
+  } else {
+    console.log('Connected to MySQL database');
+    connection.release(); // Release the connection back to the pool
   }
-  console.log('Connected to MySQL database');
 });
+
 
 // Routes
 app.post('/submit', (req, res) => {
