@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql2');
+const mysql = require('mysql2'); // Ensure you are using mysql2
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -11,8 +11,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // MySQL connection
-const mysql = require('mysql');
-
 const pool = mysql.createPool({
   host: 'sql3.freesqldatabase.com',
   user: 'sql3721397', // Your FreeSQLDatabase username
@@ -32,7 +30,6 @@ pool.getConnection((err, connection) => {
   }
 });
 
-
 // Routes
 app.post('/submit', (req, res) => {
   const { name, city, country, grade, bestBook, bestMusic, pets, siblings, bestMusician, favoriteColor, birthDate } = req.body;
@@ -40,7 +37,7 @@ app.post('/submit', (req, res) => {
   const query = 'INSERT INTO submissions (name, city, country, grade, bestBook, bestMusic, pets, siblings, bestMusician, favoriteColor, birthDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
   const values = [name, city, country, grade, bestBook, bestMusic, pets, siblings, bestMusician, favoriteColor, birthDate];
 
-  db.query(query, values, (err, results) => {
+  pool.query(query, values, (err, results) => {
     if (err) {
       console.error('Error saving form data:', err);
       res.status(500).send('Error saving form data');
@@ -54,7 +51,7 @@ app.get('/data/:id', (req, res) => {
   const { id } = req.params;
 
   const query = 'SELECT * FROM submissions WHERE id = ?';
-  db.query(query, [id], (err, results) => {
+  pool.query(query, [id], (err, results) => {
     if (err) {
       console.error('Error retrieving form data:', err);
       res.status(500).send('Error retrieving form data');
@@ -68,7 +65,7 @@ app.get('/data/:id', (req, res) => {
 
 app.get('/allteam', (req, res) => {
   const query = 'SELECT * FROM submissions';
-  db.query(query, (err, results) => {
+  pool.query(query, (err, results) => {
     if (err) {
       console.error('Error retrieving all team data:', err);
       res.status(500).send('Error retrieving all team data');
