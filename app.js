@@ -18,8 +18,7 @@ const pool = mysql.createPool({
   user: 'sql3721397', // Your FreeSQLDatabase username
   password: 'tXF5imL42A', // Your FreeSQLDatabase password
   database: 'sql3721397', // Your FreeSQLDatabase name
-  port: 3306, // Ensure the port matches your database configuration
-  connectionLimit: 10 // Adjust this based on your application's needs
+  connectionLimit: 100 // Adjust this based on your application's needs
 });
 
 // Connect to MySQL database using the pool
